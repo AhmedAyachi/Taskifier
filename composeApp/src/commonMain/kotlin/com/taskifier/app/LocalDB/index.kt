@@ -1,4 +1,5 @@
 package com.taskifier.app;
+import kotlin.random.Random;
 
 
 class LocalDB {
@@ -7,7 +8,7 @@ class LocalDB {
             "id" to "$i",
             "name" to "task_${i+1}",
             "description" to text.slice(0 until 95),
-            "done" to (Math.random()>0.5),
+            "done" to (Random.nextFloat()>0.5),
         )}
     }
 }

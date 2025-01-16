@@ -1,5 +1,4 @@
 package com.taskifier.app;
-import android.graphics.Color.parseColor;
 import androidx.compose.ui.graphics.Color;
 
 
@@ -7,12 +6,12 @@ object Theme {
     val mainFont="";
     val majorFont="";
     val minorFont="";
-    val mainColor=Color(parseColor("#ee7f17"));
-    val majorColor=Color(parseColor("#ffffff"));
-    val minorColor=Color(parseColor("#f9f9f9"));
-    val accentColor=Color(parseColor("#000000"));
-    val textColor=Color(parseColor("#000000"));
-    val backgroundColor=Color(parseColor("#ffffff"));
+    val mainColor=Color(238,127,23);
+    val majorColor=Color(255,255,255);
+    val minorColor=Color(249,249,249);
+    val accentColor=Color(0,0,0);
+    val textColor=Color(0,0,0);
+    val backgroundColor=Color(255,255,255);
 }
 
 fun String.capitalize(limit:Int=-1):String {

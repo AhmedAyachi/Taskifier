@@ -1,17 +1,14 @@
 package screens.homescreen;
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,10 +20,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.taskifier.app.Theme
 import components.LoadingView.LoadingView
 import components.TaskView.TaskView
+import components.header.Header
 import resources.Task
 
 
-class HomeScreen : Screen {
+class HomeScreen:Screen {
     
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
@@ -42,16 +40,12 @@ class HomeScreen : Screen {
             finally {
                 loading=false;
             }
-
         }
 
         Scaffold(
-            topBar={
-                CenterAlignedTopAppBar(
-                    title={Text(text="Home")},
-                    colors=styles.topbar.colors,
-                );
-            },
+            topBar={Header(
+                title="my tasks",
+            )},
             floatingActionButton={
                 FloatingActionButton(
                     onClick={},
@@ -66,7 +60,6 @@ class HomeScreen : Screen {
                 }
             },
         ){ padding ->
-
             if(loading) LoadingView();
             Column(styles.tasks.modifier(padding)){
                 LazyColumn {
