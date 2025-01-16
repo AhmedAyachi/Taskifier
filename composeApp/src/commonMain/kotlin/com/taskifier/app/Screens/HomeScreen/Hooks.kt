@@ -5,6 +5,6 @@ import kotlinx.coroutines.delay;
 
 
 suspend fun fetchTasks():List<Map<String,Any>> {
-    delay(3000);
+    delay(1000);
     return LocalDB.tasks;
 }

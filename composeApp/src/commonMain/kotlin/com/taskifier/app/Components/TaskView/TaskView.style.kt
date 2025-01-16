@@ -2,13 +2,15 @@ package components.TaskView;
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -18,13 +20,19 @@ import com.taskifier.app.Theme
 
 object styles {
     object taskview {
+        val modifier=Modifier.
+            height(100.dp).
+            clipToBounds()
+        ;
+    }
+    object container {
         val modifier={ style:Modifier? -> Modifier.
-            fillMaxWidth().
-            fillMaxHeight().
+            fillMaxSize().
             padding(horizontal=0.dp,vertical=0.dp).
             border(0.dp,Color.Transparent).
-            then(style ?: Modifier).
-            padding(horizontal=10.dp,vertical=10.dp)
+            then(style?:Modifier).
+            padding(horizontal=10.dp,vertical=10.dp).
+            clipToBounds()
         }
         val verticalAlignment=Alignment.CenterVertically;
         val horizontalArrangement=Arrangement.SpaceBetween;

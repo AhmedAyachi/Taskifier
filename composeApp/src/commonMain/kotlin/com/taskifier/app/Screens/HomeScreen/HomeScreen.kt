@@ -1,32 +1,28 @@
 package screens.homescreen;
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.CenterAlignedTopAppBar;
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold;
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable;
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen;
-import com.taskifier.app.LocalDB
+import cafe.adriel.voyager.core.screen.Screen
 import com.taskifier.app.Theme
 import components.LoadingView.LoadingView
-import components.TaskView.TaskView;
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import components.TaskView.TaskView
 import resources.Task
 
 
@@ -35,16 +31,16 @@ class HomeScreen : Screen {
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
     override fun Content(){
-        val tasks=remember {mutableStateOf(listOf<Map<String,Any>>())};
-        val loading=remember {mutableStateOf(true)};
+        var tasks by remember {mutableStateOf(listOf<Map<String,Any>>())};
+        var loading by remember {mutableStateOf(true)};
 
-        LaunchedEffect(true){
+        LaunchedEffect(Unit){
             try{
                 val data=fetchTasks();
-                tasks.value=data;
+                tasks=data;
             }
             finally {
-                loading.value=false;
+                loading=false;
             }
 
         }
@@ -71,17 +67,17 @@ class HomeScreen : Screen {
             },
         ){ padding ->
 
-            if(loading.value) LoadingView();
+            if(loading) LoadingView();
             Column(styles.tasks.modifier(padding)){
                 LazyColumn {
                     itemsIndexed(
-                        items=tasks.value,
+                        items=tasks,
                     ){ i,task ->
                         TaskView(
                             task=Task(task),
                             modifier=styles.taskview.modifier(i),
                             onDelete={
-                                tasks.value=tasks.value.filter {it!=task};
+                                tasks=tasks.filter {it!=task};
                             }
                         );
                     }
