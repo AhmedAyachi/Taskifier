@@ -22,7 +22,7 @@ object styles {
         val modifier=Modifier.
             height(5.dp).
             clip(RoundedCornerShape(5.dp)).
-            background(Theme.backgroundColor).
+            background(Theme.textColor.copy(alpha=0.15f)).
             clipToBounds()
         ;
     }

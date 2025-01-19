@@ -38,7 +38,6 @@ fun TaskView(
     task:Task,
     modifier:Modifier=Modifier,
     active:Boolean=true,
-    onToggle:((Boolean)->Unit)?=null,
     onDelete:(()->Unit)?=null,
 ){
     val navigator=LocalNavigator.currentOrThrow;

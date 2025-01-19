@@ -52,26 +52,6 @@ object styles {
     object details {
         val modifer=Modifier;
     }
-    /*object checkbox {
-        val modifier=Modifier.
-            padding(0.dp).
-            padding(end=8.dp)
-        ;
-        val colors=CheckboxColors(
-            checkedBoxColor=Theme.mainColor,
-            uncheckedBoxColor=Theme.textColor,
-            disabledCheckedBoxColor=Theme.textColor,
-            disabledBorderColor=Theme.mainColor,
-            checkedBorderColor=Theme.mainColor,
-            uncheckedBorderColor=Theme.mainColor,
-            checkedCheckmarkColor=Theme.textColor,
-            uncheckedCheckmarkColor=Color.Transparent,
-            disabledUncheckedBoxColor=Color.Black,
-            disabledIndeterminateBorderColor=Color.Black,
-            disabledUncheckedBorderColor=Color.Black,
-            disabledIndeterminateBoxColor=Color.Black,
-        );
-    }*/
     object name {
         val modifier={ active:Boolean -> Modifier.
             alpha(if(active) 1f else 0.5f)
