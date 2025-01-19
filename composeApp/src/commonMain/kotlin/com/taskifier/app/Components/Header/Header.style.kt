@@ -14,11 +14,11 @@ import com.taskifier.app.Theme
 
 object styles {
     object header {
-        val modifier=Modifier.
+        val modifier={ modifier:Modifier -> Modifier.
             fillMaxWidth().
-            //background(Theme.mainColor).
-            padding(vertical=5.dp,horizontal=Theme.spacingHorizontal)
-        ;
+            padding(vertical=20.dp,horizontal=Theme.spacingHorizontal).
+            then(modifier);
+        }
     }
     object info {
         val modifier=Modifier;

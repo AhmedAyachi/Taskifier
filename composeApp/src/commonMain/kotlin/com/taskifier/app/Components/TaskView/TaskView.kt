@@ -9,6 +9,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +25,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.taskifier.app.Theme
 import components.AlertView.AlertView
+import components.LoadingView.LoadingView
 import components.ProgressView.ProgressView
+import components.TaskView.Hooks.saveTask
 import org.jetbrains.compose.resources.painterResource
 import resources.Task
 import resources.capitalize
@@ -45,6 +48,14 @@ fun TaskView(
     var menuOffset by remember(task.id){mutableStateOf<Offset?>(null)};
     var checked by remember(task.id){mutableStateOf(task.done)};
     var showAlert by remember(task.id){mutableStateOf(false)};
+    var taskId by remember {mutableStateOf(task.id)};
+
+    LaunchedEffect(Unit){
+        if(task.id==null){
+            task.id=saveTask(task);
+            taskId=task.id;
+        }
+    }
 
     Box(styles.taskview.modifier(modifier).clickable {
         navigator.push(TaskScreen(task));
@@ -63,7 +74,7 @@ fun TaskView(
                     verticalArrangement=Arrangement.SpaceBetween,
                 ){
                     Text(
-                        text=task.name,
+                        text=task.name?.capitalize()?:"",
                         color=Theme.textColor,
                         modifier=styles.name.modifier(active),
                         fontSize=styles.name.fontSize,
@@ -84,7 +95,7 @@ fun TaskView(
                         menuShown=!menuShown;
                     }.onGloballyPositioned { layout ->
                         menuOffset=layout.positionInParent();
-                        println("menuOffset $menuOffset");
+                        //println("menuOffset $menuOffset");
                     },
                 )
             }
@@ -92,13 +103,13 @@ fun TaskView(
                 withPercentage=true,
                 progress=({
                     if(checked) 1f;
-                    else{
-                        val chores=task.chores;
-                        chores.count { it.done }/chores.count().toFloat();
-                    }
+                    else task.progress;
                 })(),
             );
         }
+        LoadingView(
+            visible=taskId==null,
+        );
         AlertView(
             visible=showAlert,
             message="delete ${task.name}",

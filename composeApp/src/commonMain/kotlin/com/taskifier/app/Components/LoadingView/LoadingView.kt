@@ -1,5 +1,7 @@
 package components.LoadingView;
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -10,23 +12,29 @@ import com.taskifier.app.Theme
 
 @Composable
 fun LoadingView(
+    visible:Boolean=true,
     message:String?=null,
 ){
-     Box(
-        modifier=styles.loadingview.modifier,
-        contentAlignment=Alignment.Center,
+    AnimatedVisibility(
+        visible=visible,
+        exit=fadeOut(),
     ){
-        if(message==null){
-            CircularProgressIndicator(
-                modifier=styles.indicator.modifier,
-                color=styles.indicator.color,
-            );
-        }
-        else{
-            Text(
-                text=message,
-                color=Theme.textColor,
-            );
+        Box(
+            modifier=styles.loadingview.modifier,
+            contentAlignment=Alignment.Center,
+        ){
+            if(message==null){
+                CircularProgressIndicator(
+                    modifier=styles.indicator.modifier,
+                    color=styles.indicator.color,
+                );
+            }
+            else{
+                Text(
+                    text=message,
+                    color=Theme.textColor,
+                );
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 package screens.homescreen;
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,7 +14,6 @@ object styles {
     object tasks {
         val modifier={ padding:PaddingValues -> Modifier.
             fillMaxSize().
-            background(Theme.backgroundColor).
             padding(
                 top=padding.calculateTopPadding(),
                 bottom=padding.calculateBottomPadding(),

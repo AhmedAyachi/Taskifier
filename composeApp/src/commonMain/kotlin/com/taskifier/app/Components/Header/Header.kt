@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.taskifier.app.Theme
@@ -15,18 +16,18 @@ import org.jetbrains.compose.resources.painterResource
 import resources.capitalize
 import taskifier.composeapp.generated.resources.Res
 import taskifier.composeapp.generated.resources.chevron0
-import taskifier.composeapp.generated.resources.plus0
 
 
 @Composable
 fun Header(
     title:String="",
     back:Boolean=true,
-    actions:(Array<Map<String,Any>>)=arrayOf(),
+    actions:(Array<Map<String,Any>>?)=null,
+    modifer:Modifier=Modifier,
 ){
     val navigator=LocalNavigator.currentOrThrow;
     Row(
-        modifier=styles.header.modifier,
+        modifier=styles.header.modifier(modifer),
         horizontalArrangement=Arrangement.SpaceBetween,
         verticalAlignment=Alignment.CenterVertically,
     ){
@@ -51,14 +52,9 @@ fun Header(
                 color=styles.title.color,
             )
         }
-        ActionSet(
+        if(actions!==null) ActionSet(
             tintColor=Theme.textColor,
-            actions=actions+arrayOf(mapOf(
-                "icon" to Res.drawable.plus0,
-                "onTrigger" to { action:Map<String,Any> ->
-
-                }
-            )),
+            actions=actions,
         )
     }
 }

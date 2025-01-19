@@ -18,14 +18,16 @@ import resources.Chore
 
 @Composable
 fun ChoreList(
+    modifier:Modifier=Modifier,
     chores:List<Chore>?=null,
     onChange:((List<Chore>)->Unit)?=null,
 ){
     Column(
-        modifier=styles.chorelist.modifer,
+        modifier=styles.chorelist.modifer.then(modifier),
         verticalArrangement=Arrangement.spacedBy(20.dp),
     ){
         var items by remember {mutableStateOf(chores?:listOf())};
+
         ChoreInput(
             onSubmit={ text ->
                 items=listOf(Chore(text))+items;
@@ -42,6 +44,10 @@ fun ChoreList(
             items.forEach { chore ->
                 ChoreView(
                     chore=chore,
+                    onChange={
+                        //items=items;
+                        onChange?.invoke(items);
+                    },
                     onDelete={
                         items=items.filter { chore!==it };
                         onChange?.invoke(items);

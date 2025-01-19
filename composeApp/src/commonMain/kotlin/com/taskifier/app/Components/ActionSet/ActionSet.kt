@@ -16,7 +16,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun ActionSet(
     tintColor:Color=Theme.mainColor,
-    actions:Array<Map<String,Any>>?=null,
+    actions:Array<Map<String,Any>>,
 ){
     Row(
         modifier=styles.actionset.modifier,
