@@ -12,7 +12,7 @@ object Theme {
     val majorColor=Color(255,255,255);
     val minorColor=Color(249,249,249);
     val accentColor=Color(23,134,238);
-    val textColor=Color(255,255,255);
+    val textColor=Color(255f,255f,255f,0.75f);
     val backgroundColor=Color(35,35,35);
     val spacingHorizontal=20.dp;
 }

@@ -4,17 +4,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.taskifier.app.Theme
@@ -22,9 +27,10 @@ import components.AlertView.AlertView
 import components.ProgressView.ProgressView
 import org.jetbrains.compose.resources.painterResource
 import resources.Task
+import resources.capitalize
 import screens.taskscreen.TaskScreen
 import taskifier.composeapp.generated.resources.Res
-import taskifier.composeapp.generated.resources.trash0
+import taskifier.composeapp.generated.resources.dots0
 
 
 @Composable
@@ -36,75 +42,97 @@ fun TaskView(
     onDelete:(()->Unit)?=null,
 ){
     val navigator=LocalNavigator.currentOrThrow;
-    var checked by remember(task.id) {mutableStateOf(task.done)};
-    var showAlert by remember(task.id) {mutableStateOf(false)};
+    var menuShown by remember(task.id){mutableStateOf(false)};
+    var menuOffset by remember(task.id){mutableStateOf<Offset?>(null)};
+    var checked by remember(task.id){mutableStateOf(task.done)};
+    var showAlert by remember(task.id){mutableStateOf(false)};
 
     Box(styles.taskview.modifier(modifier).clickable {
         navigator.push(TaskScreen(task));
     }){
+        Column(
+            modifier=styles.container.modifier,
+            horizontalAlignment=Alignment.Start,
+            verticalArrangement=Arrangement.SpaceBetween,
+        ){
+            Row(
+                modifier=Modifier.weight(1f,true),
+                verticalAlignment=Alignment.Top,
+            ){
+                Column(
+                    modifier=Modifier.weight(1f,true),
+                    verticalArrangement=Arrangement.SpaceBetween,
+                ){
+                    Text(
+                        text=task.name,
+                        color=Theme.textColor,
+                        modifier=styles.name.modifier(active),
+                        fontSize=styles.name.fontSize,
+                        textDecoration=styles.name.textDecoration(task.done),
+                    );
+                    Text(
+                        text=task.description,
+                        color=Theme.textColor,
+                        modifier=styles.description.modifier,
+                        textDecoration=styles.description.textDecoration(task.done),
+                    )
+                }
+                Icon(
+                    contentDescription="",
+                    tint=Theme.textColor,
+                    painter=painterResource(Res.drawable.dots0),
+                    modifier=styles.contextbtn.modifier.clickable {
+                        menuShown=!menuShown;
+                    }.onGloballyPositioned { layout ->
+                        menuOffset=layout.positionInParent();
+                        println("menuOffset $menuOffset");
+                    },
+                )
+            }
+            ProgressView(
+                withPercentage=true,
+                progress=({
+                    if(checked) 1f;
+                    else{
+                        val chores=task.chores;
+                        chores.count { it.done }/chores.count().toFloat();
+                    }
+                })(),
+            );
+        }
         AlertView(
             visible=showAlert,
             message="delete ${task.name}",
             onConfirm={onDelete?.invoke()},
             onCancel={showAlert=false}
         )
-        Row(
-            modifier=styles.container.modifier,
-            verticalAlignment=styles.container.alignment,
-            horizontalArrangement=styles.container.arrangement,
+        DropdownMenu(
+            expanded=menuShown,
+            onDismissRequest={menuShown=false},
+            offset=DpOffset((menuOffset?.x ?: 0f).dp,-100.dp),
         ){
-            Row(
-                modifier=Modifier.weight(1f,true),
-                verticalAlignment=styles.details.alignment,
-            ){
-                Checkbox(
-                    checked=checked,
-                    modifier=styles.checkbox.modifier,
-                    colors=styles.checkbox.colors,
-                    onCheckedChange={ value ->
-                        task.done=value;
-                        checked=value;
-                        onToggle?.invoke(value);
-                    },
-                );
-                Column(
-                    modifier=Modifier.fillMaxHeight(),
-                    verticalArrangement=Arrangement.SpaceBetween,
-                ){
-                    Column {
-                        Text(
-                            text=task.name,
-                            color=Theme.textColor,
-                            modifier=styles.name.modifier(active),
-                            fontSize=styles.name.fontSize,
-                            textDecoration=styles.name.textDecoration(task.done),
-                        );
-                        Text(
-                            text=task.description,
-                            color=Theme.textColor,
-                            modifier=styles.description.modifier,
-                            textDecoration=styles.description.textDecoration(task.done),
-                        )
+            arrayOf(
+                mapOf(
+                    "label" to "check",
+                    "onTrigger" to {
+                        task.done=!checked;
+                        checked=task.done;
                     }
-                    ProgressView(
-                        withPercentage=true,
-                        progress=({
-                            val done=task.done;
-                            if(done) 1f;
-                            else{
-                                val chores=task.chores;
-                                chores.count { it.done }/chores.count().toFloat();
-                            }
-                        })(),
-                    );
-                }
-            }
-            IconButton(onClick={showAlert=true}){
-                Icon(
-                    contentDescription="delete",
-                    tint=styles.deletebtn.tint,
-                    painter=painterResource(Res.drawable.trash0),
-                )
+                ),
+                mapOf(
+                    "label" to "delete",
+                    "onTrigger" to onDelete,
+                ),
+            ).forEach { option ->
+                val label=option["label"] as String;
+                val onTrigger=option["onTrigger"] as? (Map<String,Any?>)->Unit;
+                DropdownMenuItem(
+                    text={Text(text=label.capitalize())},
+                    onClick={
+                        onTrigger?.invoke(option);
+                        println("Selected: $option")
+                    }
+                );
             }
         }
     }
