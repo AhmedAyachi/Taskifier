@@ -11,7 +11,7 @@ import screens.homescreen.HomeScreen
 @Composable
 @Preview
 fun App(){
-    MaterialTheme {
+    MaterialTheme{
         Navigator(screen=HomeScreen()){
             SlideTransition(it);
         };

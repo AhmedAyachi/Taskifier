@@ -1,4 +1,5 @@
 package components.AlertView;
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -8,7 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.taskifier.app.capitalize
+import resources.capitalize
 
 
 @Composable
@@ -67,11 +68,11 @@ fun AlertView(
 
 val getActions={ onCancel:(()->Unit)?,onConfirm:(()->Unit)? -> arrayOf(
     mapOf(
-        "label" to "cancel",
-        "onTrigger" to {onCancel?.invoke()},
-    ),
-    mapOf(
         "label" to "confirm",
         "onTrigger" to {onConfirm?.invoke()},
+    ),
+    mapOf(
+        "label" to "cancel",
+        "onTrigger" to {onCancel?.invoke()},
     ),
 )}

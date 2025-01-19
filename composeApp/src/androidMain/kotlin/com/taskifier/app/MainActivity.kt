@@ -22,7 +22,7 @@ class MainActivity:ComponentActivity(){
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(window,true);
         setContent {
-            StatusBar(Theme.mainColor);
+            StatusBar(Theme.backgroundColor);
             App();
         }
     }
