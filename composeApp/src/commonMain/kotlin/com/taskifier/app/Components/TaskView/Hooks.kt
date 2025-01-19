@@ -8,7 +8,7 @@ import resources.randomId
 
 suspend fun saveTask(task:Task):String {
     if(AppConfig.isDevEnv){
-        delay(2000);
+        delay(10000);
         return randomId();
     }
     else{

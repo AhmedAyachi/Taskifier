@@ -44,11 +44,13 @@ fun TaskView(
     onDelete:(()->Unit)?=null,
 ){
     val navigator=LocalNavigator.currentOrThrow;
-    var menuShown by remember(task.id){mutableStateOf(false)};
-    var menuOffset by remember(task.id){mutableStateOf<Offset?>(null)};
-    var checked by remember(task.id){mutableStateOf(task.done)};
-    var showAlert by remember(task.id){mutableStateOf(false)};
     var taskId by remember {mutableStateOf(task.id)};
+    //println("taskId $taskId");
+    var menuShown by remember {mutableStateOf(false)};
+    var menuOffset by remember {mutableStateOf<Offset?>(null)};
+    var checked by remember {mutableStateOf(task.done)};
+    var showAlert by remember {mutableStateOf(false)};
+
 
     LaunchedEffect(Unit){
         if(task.id==null){
@@ -107,9 +109,7 @@ fun TaskView(
                 })(),
             );
         }
-        LoadingView(
-            visible=taskId==null,
-        );
+        LoadingView(visible=taskId==null);
         AlertView(
             visible=showAlert,
             message="delete ${task.name}",

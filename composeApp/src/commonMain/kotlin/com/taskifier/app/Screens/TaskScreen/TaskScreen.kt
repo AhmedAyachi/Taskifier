@@ -42,7 +42,7 @@ class TaskScreen(val task:Task=Task()):ScreenView(
             TextField(
                 value=task.description,
                 modifier=styles.textfield.modifier,
-                placeholder="task name",
+                placeholder="task description",
                 multiline=true,
                 onChange={ task.description=it },
             )

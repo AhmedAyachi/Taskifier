@@ -9,16 +9,10 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.taskifier.app.Theme
@@ -26,37 +20,18 @@ import components.LoadingView.LoadingView
 import components.ScreenView.ScreenView
 import components.TaskView.TaskView
 import components.header.Header
-import resources.Task
 import screens.taskscreen.TaskScreen
 
 
 class HomeScreen:ScreenView(
     modifier=styles.homescreen.modifier,
     children={
-        val lifecycle=LocalLifecycleOwner.current.lifecycle;
         val navigator=LocalNavigator.currentOrThrow;
-        var tasks by rememberSaveable {mutableStateOf<List<Task>?>(null)};
-        var state by rememberSaveable {mutableStateOf(mapOf(
-            "newTask" to Task(),
-        ))};
+        var tasks by rememberTasks();
+        val newTask=rememberNewTask { tasks=listOf(it)+tasks!! };
+        val listState=rememberListState(tasks);
 
-        LaunchedEffect(Unit){
-            try{
-                if(tasks===null) tasks=fetchTasks();
-            }
-            catch(error:Error){
-                tasks=listOf();
-            }
-        }
-        LaunchedEffect(lifecycle){
-            if(tasks!=null) lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
-                val newTask=state["newTask"] as Task;
-                if(newTask.chores.isNotEmpty()){
-                    state+=mapOf("newTask" to Task());
-                    tasks=listOf(newTask)+tasks!!;
-                }
-            }
-        }
+
 
         Scaffold(
             containerColor=Color.Transparent,
@@ -68,7 +43,7 @@ class HomeScreen:ScreenView(
                 FloatingActionButton(
                     shape=RoundedCornerShape(size=12.dp),
                     containerColor=Theme.mainColor,
-                    onClick={navigator.push(TaskScreen(state["newTask"] as Task))},
+                    onClick={navigator.push(TaskScreen(newTask))},
                 ){
                     Icon(
                         imageVector=Icons.Default.Edit,
@@ -78,16 +53,16 @@ class HomeScreen:ScreenView(
                 }
             },
         ){ padding ->
-            LoadingView(
-                visible=tasks===null,
-            );
+            LoadingView(visible=tasks===null);
             LazyColumn(
                 modifier=styles.tasks.modifier(padding),
                 contentPadding=PaddingValues(vertical=Theme.spacingHorizontal),
+                state=listState,
             ){
                 itemsIndexed(
                     items=tasks?:listOf(),
-                ){ i,task ->
+                    key={i,task->task.id?:i},
+                ){ _,task ->
                     TaskView(
                         task=task,
                         modifier=styles.taskview.modifier,
