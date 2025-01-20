@@ -67,7 +67,7 @@ class HomeScreen:ScreenView(
                         task=task,
                         modifier=styles.taskview.modifier,
                         onDelete={
-                            tasks=tasks?.filter {it!=task};
+                            tasks=tasks?.filter {it.id!==task.id};
                         }
                     );
                 }

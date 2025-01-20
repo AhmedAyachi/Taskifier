@@ -18,6 +18,7 @@ class MainActivity:ComponentActivity(){
         val androidTransparent=android.graphics.Color.TRANSPARENT;
         enableEdgeToEdge(
             statusBarStyle=SystemBarStyle.dark(androidTransparent),
+            navigationBarStyle=SystemBarStyle.dark(androidTransparent),
         );
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(window,true);

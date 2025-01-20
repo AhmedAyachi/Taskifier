@@ -30,6 +30,9 @@ object styles {
             graphicsLayer(translationX=-20f)
         ;
     }
+    object textfield {
+        val modifier=Modifier.fillMaxWidth();
+    }
     object title {
         val modifier=Modifier;
         val fontSize=5.em;

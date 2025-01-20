@@ -33,6 +33,11 @@ fun ChoreInput(onSubmit:((String)->Unit)?=null){
             value=value,
             placeholder="write chore ...",
             onChange={ value=it },
+            onSubmit={
+                value="";
+                onSubmit?.invoke(it);
+                false;
+            },
         );
         IconButton(
             onClick={

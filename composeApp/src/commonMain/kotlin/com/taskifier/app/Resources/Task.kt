@@ -10,10 +10,13 @@ class Task(data:Map<String,Any?>):Chore(data){
     var name=data["name"] as String;
     var chores:List<Chore> = (data["chores"] as? List<Map<String,Any?>> ?: listOf()).map { Chore(it) }
 
-    override var done:Boolean=super.done
+    override var done:Boolean
         get(){
             val chores=this.chores;
             return chores.isNotEmpty()&&chores.all { it.done };
+        }
+        set(value){
+            chores.forEach { it.done=value };
         }
 
     val progress:Float

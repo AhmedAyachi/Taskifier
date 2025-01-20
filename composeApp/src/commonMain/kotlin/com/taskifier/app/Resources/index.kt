@@ -1,6 +1,5 @@
 package resources;
 
-
 fun randomId(length:Int=15):String {
     val characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     return (1..length).map { characters.random() }.joinToString("");

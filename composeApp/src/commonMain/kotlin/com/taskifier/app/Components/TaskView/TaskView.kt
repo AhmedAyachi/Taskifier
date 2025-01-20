@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,8 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.taskifier.app.Theme
@@ -28,6 +24,7 @@ import components.AlertView.AlertView
 import components.LoadingView.LoadingView
 import components.ProgressView.ProgressView
 import components.TaskView.Hooks.saveTask
+import components.contextmenu.ContextMenu
 import org.jetbrains.compose.resources.painterResource
 import resources.Task
 import resources.capitalize
@@ -45,9 +42,8 @@ fun TaskView(
 ){
     val navigator=LocalNavigator.currentOrThrow;
     var taskId by remember {mutableStateOf(task.id)};
-    //println("taskId $taskId");
     var menuShown by remember {mutableStateOf(false)};
-    var menuOffset by remember {mutableStateOf<Offset?>(null)};
+    var menuOffset by remember {mutableStateOf(Offset(0f,0f))};
     var checked by remember {mutableStateOf(task.done)};
     var showAlert by remember {mutableStateOf(false)};
 
@@ -76,7 +72,7 @@ fun TaskView(
                     verticalArrangement=Arrangement.SpaceBetween,
                 ){
                     Text(
-                        text=task.name?.capitalize()?:"",
+                        text=task.name.ifEmpty { "--" }.capitalize(),
                         color=Theme.textColor,
                         modifier=styles.name.modifier(active),
                         fontSize=styles.name.fontSize,
@@ -96,17 +92,14 @@ fun TaskView(
                     modifier=styles.contextbtn.modifier.clickable {
                         menuShown=!menuShown;
                     }.onGloballyPositioned { layout ->
-                        menuOffset=layout.positionInParent();
-                        //println("menuOffset $menuOffset");
+                        val offset=layout.positionInParent();
+                        menuOffset=Offset(offset.x-220,offset.y+20);
                     },
                 )
             }
             ProgressView(
                 withPercentage=true,
-                progress=({
-                    if(checked) 1f;
-                    else task.progress;
-                })(),
+                progress=task.progress,
             );
         }
         LoadingView(visible=taskId==null);
@@ -116,34 +109,27 @@ fun TaskView(
             onConfirm={onDelete?.invoke()},
             onCancel={showAlert=false}
         )
-        DropdownMenu(
-            expanded=menuShown,
-            onDismissRequest={menuShown=false},
-            offset=DpOffset((menuOffset?.x ?: 0f).dp,-100.dp),
-        ){
-            arrayOf(
-                mapOf(
-                    "label" to "check",
-                    "onTrigger" to {
-                        task.done=!checked;
+
+        ContextMenu(
+            visible=menuShown,
+            offset=menuOffset,
+            options=listOf(
+                if(task.done) mapOf();
+                else mapOf(
+                    "label" to "done",
+                    "onTrigger" to { action:Map<String,Any?> ->
+                        task.done=true;
                         checked=task.done;
+                        menuShown=false;
                     }
                 ),
                 mapOf(
                     "label" to "delete",
-                    "onTrigger" to onDelete,
+                    "onTrigger" to { action:Map<String,Any?> ->
+                        onDelete?.invoke();
+                    },
                 ),
-            ).forEach { option ->
-                val label=option["label"] as String;
-                val onTrigger=option["onTrigger"] as? (Map<String,Any?>)->Unit;
-                DropdownMenuItem(
-                    text={Text(text=label.capitalize())},
-                    onClick={
-                        onTrigger?.invoke(option);
-                        println("Selected: $option")
-                    }
-                );
-            }
-        }
+            ).filter { it.isNotEmpty() },
+        )
     }
 }

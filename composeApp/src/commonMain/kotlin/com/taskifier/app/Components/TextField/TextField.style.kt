@@ -16,13 +16,13 @@ object styles {
         ;
         val colors=@Composable {
             TextFieldDefaults.colors(
-            focusedTextColor= Theme.textColor,
-            unfocusedTextColor= Theme.textColor,
-            focusedPlaceholderColor= Theme.textColor.copy(0.5f),
-            unfocusedPlaceholderColor= Theme.textColor.copy(0.5f),
-            focusedContainerColor= Theme.textColor.copy(0.15f),
-            unfocusedContainerColor= Theme.textColor.copy(0.15f),
-            focusedIndicatorColor= Theme.mainColor,
+            focusedTextColor=Theme.textColor,
+            unfocusedTextColor=Theme.textColor,
+            focusedPlaceholderColor=Theme.textColor.copy(0.5f),
+            unfocusedPlaceholderColor=Theme.textColor.copy(0.5f),
+            focusedContainerColor=Theme.textColor.copy(0.15f),
+            unfocusedContainerColor=Theme.textColor.copy(0.15f),
+            focusedIndicatorColor=Theme.mainColor,
         )};
     }
 }
