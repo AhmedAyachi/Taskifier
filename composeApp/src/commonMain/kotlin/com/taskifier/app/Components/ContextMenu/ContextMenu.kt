@@ -1,6 +1,10 @@
 package components.contextmenu;
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,12 +22,17 @@ fun ContextMenu(
     visible:Boolean,
     offset:Offset=Offset(0f,0f),
     options:List<Map<String,Any?>>,
+    enterTransition:EnterTransition=fadeIn(),
+    exitTransition:ExitTransition=fadeOut(),
 ){
     AnimatedVisibility(
         visible=visible,
         modifier=styles.contextmenu.modifier(offset),
+        enter=enterTransition,
+        exit=exitTransition,
     ){
         Column(
+            modifier=styles.container.modifier,
             verticalArrangement=Arrangement.Top,
             //horizontalAlignment=Alignment.CenterHorizontally,
         ){
