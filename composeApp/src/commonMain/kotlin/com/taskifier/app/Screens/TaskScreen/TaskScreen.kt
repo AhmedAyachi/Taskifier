@@ -19,7 +19,6 @@ class TaskScreen(val task:Task=Task()):ScreenView(
     modifier=styles.taskscreen.modifier,
     children={
         var progress by remember {mutableStateOf(task.progress)};
-
         Header(
             title=task.name,
             placeholder=task.name.ifEmpty { "task name" },

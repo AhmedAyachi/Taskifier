@@ -6,6 +6,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.taskifier.app.Theme
@@ -23,13 +24,21 @@ fun ActionSet(
         horizontalArrangement=Arrangement.spacedBy(20.dp),
         verticalAlignment=Alignment.CenterVertically,
     ){
-        actions?.forEach { action ->
+        actions.forEach { action ->
+            val modifier=action["modifier"] as? Modifier;
             val icon=action["icon"] as? DrawableResource;
             IconButton(
-                modifier=styles.action.modifier,
+                modifier=styles.action.modifier.then(modifier?:Modifier),
                 onClick={
-                    val onTrigger=action["onTrigger"] as? ((Map<String,Any>)->Unit);
-                    onTrigger?.invoke(action);
+                    val onTrigger=action["onTrigger"];
+                    val withAction=onTrigger as? (Map<String,Any>)->Unit;
+                    if(withAction==null){
+                        val withoutAction=onTrigger as? ()->Unit;
+                        withoutAction?.invoke();
+                    }
+                    else withAction(action);
+
+
                 },
             ){
                 if(icon!==null){

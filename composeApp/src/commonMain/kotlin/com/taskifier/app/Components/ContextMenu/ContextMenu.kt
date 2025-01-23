@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import resources.capitalize
 
@@ -21,7 +22,9 @@ import resources.capitalize
 fun ContextMenu(
     visible:Boolean,
     offset:Offset=Offset(0f,0f),
+    modifier:Modifier?=null,
     options:List<Map<String,Any?>>,
+    onAction:(()->Unit)?=null,
     enterTransition:EnterTransition=fadeIn(),
     exitTransition:ExitTransition=fadeOut(),
 ){
@@ -32,7 +35,7 @@ fun ContextMenu(
         exit=exitTransition,
     ){
         Column(
-            modifier=styles.container.modifier,
+            modifier=styles.container.modifier.then(modifier?:Modifier),
             verticalArrangement=Arrangement.Top,
             //horizontalAlignment=Alignment.CenterHorizontally,
         ){
@@ -47,6 +50,7 @@ fun ContextMenu(
                     verticalAlignment=Alignment.CenterVertically,
                     modifier=styles.option.modifier.clickable {
                         onTrigger?.invoke(option);
+                        onAction?.invoke();
                     },
                 ){
                     Text(

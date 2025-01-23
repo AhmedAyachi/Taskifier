@@ -10,6 +10,7 @@ compose-multiplatform = "1.7.0"
 koinCore = "3.5.3"
 kotlin = "2.1.0"
 kotlinxCoroutinesCore = "1.8.0"
+kotlinxDatetime = "0.6.0"
 libraryBase = "1.13.0"
 statelyCommon = "2.0.5"
 voyagerNavigator = "1.0.0"
@@ -21,6 +22,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 library-base = { module = "io.realm.kotlin:library-base", version.ref = "libraryBase" }
 stately-common = { module = "co.touchlab:stately-common", version.ref = "statelyCommon" }
 voyager-bottom-sheet-navigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyagerNavigator" }

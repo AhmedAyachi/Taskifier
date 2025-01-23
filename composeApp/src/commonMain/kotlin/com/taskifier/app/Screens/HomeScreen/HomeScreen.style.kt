@@ -1,5 +1,6 @@
 package screens.homescreen;
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,5 +25,8 @@ object styles {
     }
     object taskview {
         val modifier=Modifier.padding(top=Theme.spacingHorizontal);
+    }
+    object  sortingmenu {
+        val modifier=Modifier.background(Theme.mainColor.copy(0.05f));
     }
 }

@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.voyager.bottom.sheet.navigator)
             implementation(libs.voyager.tab.navigator);
             implementation(libs.koin.core);
+            implementation(libs.kotlinx.datetime);
         }
         androidMain.dependencies {
             implementation(compose.preview)

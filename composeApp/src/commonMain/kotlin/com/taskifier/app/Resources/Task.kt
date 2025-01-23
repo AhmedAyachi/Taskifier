@@ -1,6 +1,7 @@
 package resources;
 
 import io.realm.kotlin.types.annotations.PrimaryKey
+import kotlinx.datetime.Clock
 
 //import org.mongodb.kbson.ObjectId;
 
@@ -8,6 +9,7 @@ class Task(data:Map<String,Any?>):Chore(data){
     @PrimaryKey
     var id=data["id"] as? String;
     var name=data["name"] as String;
+    var assignedAt:Long=data["assignedAt"] as? Long ?: 0;
     var chores:List<Chore> = (data["chores"] as? List<Map<String,Any?>> ?: listOf()).map { Chore(it) }
 
     override var done:Boolean
@@ -29,7 +31,9 @@ class Task(data:Map<String,Any?>):Chore(data){
             }
         }
 
-    constructor(name:String=""):this(mapOf("name" to name));
+    constructor(name:String=""):this(mapOf("name" to name)){
+        this.assignedAt=Clock.System.now().toEpochMilliseconds();
+    };
 }
 
 open class Chore(data:Map<String,Any?>){

@@ -7,20 +7,23 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.taskifier.app.AppConfig
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import localdb.LocalDB
 import resources.Task
 
 
 @Composable
-fun rememberListState(tasks:List<Task>?):LazyListState {
+fun rememberListState(tasks:List<Task>?):Pair<CoroutineScope,LazyListState> {
     val listState=rememberLazyListState();
+    val coroutineScope=rememberCoroutineScope();
     LaunchedEffect(tasks){
         val task=tasks?.get(0);
         if(task!=null){
@@ -29,7 +32,7 @@ fun rememberListState(tasks:List<Task>?):LazyListState {
             }
         }
     }
-    return listState;
+    return (coroutineScope to listState);
 }
 
 @Composable
