@@ -1,2 +1,2 @@
 # What is this ?
-This is as task management app developed using Koltin and Compose Multiplatform.
+This is a task management app developed using Koltin and Compose Multiplatform.
